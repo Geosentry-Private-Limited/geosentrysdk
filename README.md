@@ -1,3 +1,83 @@
+# Geosentry SDK Integration
+
+This guide details the integration steps for the `geosentry_sdk.aar` into the Android project.
+
+## Android Integration Steps
+
+### 1. Add the AAR File
+Ensure the `geosentry_sdk.aar` file is placed in the `android/app/libs/` directory.
+- Path: `android/app/libs/geosentry_sdk.aar`
+
+### 2. Configure Project-level Gradle
+In your root `android/build.gradle`, ensure the `libs` repository is defined in `allprojects`:
+
+```groovy
+// android/build.gradle
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+```
+
+### 3. Configure App-level Gradle
+In your app module `android/app/build.gradle`, you need to apply the `kotlin-kapt` plugin and add the necessary dependencies.
+
+#### Apply Plugins
+Add `apply plugin: "kotlin-kapt"` at the top of the file:
+
+```groovy
+// android/app/build.gradle
+apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "com.facebook.react"
+apply plugin: "kotlin-kapt" // <-- Add this
+```
+
+#### Add Dependencies
+Add the AAR and its transitive dependencies to the `dependencies` block:
+
+```groovy
+// android/app/build.gradle
+dependencies {
+    // ... other dependencies
+
+    // Geosentry SDK
+    implementation files('libs/geosentry_sdk.aar')
+
+    // AndroidX & Core Libraries
+    implementation 'androidx.lifecycle:lifecycle-common:2.2.0'
+    implementation 'androidx.fragment:fragment:1.1.0'
+    implementation 'androidx.core:core:1.6.0'
+    implementation 'androidx.window:window-java:1.0.0-beta04'
+
+    // Room Database
+    implementation("androidx.room:room-ktx:2.5.2")
+    implementation("androidx.room:room-runtime:2.5.2")
+    kapt("androidx.room:room-compiler:2.5.2")
+
+    // Networking & JSON
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation "com.google.code.gson:gson:2.8.9"
+
+    // Location Services
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+
+    // Work Manager
+    implementation "androidx.work:work-runtime:2.9.0"
+}
+```
+
+---
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
